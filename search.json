@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "transformer.attention.html",
+    "href": "transformer.attention.html",
+    "title": "Attention Mechanism",
+    "section": "",
+    "text": "import torch\nfrom torch import nn\n\n\ndef addition(a,b):\n    \"Adds two numbers together\"\n    return a+b\n\nWe take the sum of a and b, which is written in python with the “+” symbol\n\nsource\n\nA\n\n A ()\n\nInitialize self. See help(type(self)) for accurate signature.\n\nfrom fastcore.foundation import docs\n\n\nCodeCode + Explanation\n\n\n\n@docs\nclass PrepareForMultiHeadAttention(nn.Module):\n    def __init__(self, d_model, heads, d_k, bias):\n        super().__init__()\n        self.linear = nn.Linear(d_model, heads * d_k, bias=bias)\n        self.heads = heads\n        self.d_k = d_k\n\n    def forward(self, x):\n        head_shape = x.shape[:-1]\n        \n        x = self.linear(x)\n        x = x.view(*head_shape, self.heads, self.d_k)\n        \n        return x\n    \n    _docs = dict(cls_doc=\"xxx\",\n                 forward=\"yyy\")\n\n\n\n\n@docs\nclass PrepareForMultiHeadAttention(nn.Module):\n    def __init__(self, d_model, heads, d_k, bias):\n        super().__init__()\n        self.linear = nn.Linear(d_model, heads * d_k, bias=bias)\n        self.heads = heads\n        self.d_k = d_k\n\n    def forward(self, x):\n        head_shape = x.shape[:-1]\n        \n        x = self.linear(x)\n        x = x.view(*head_shape, self.heads, self.d_k)\n        \n        return x\n    \n    _docs = dict(cls_doc=\"xxx\",\n                 forward=\"yyy\")\n\nself.heads = heads\ndasdasd\n\n\n\n\n\nMulti-head Attention\nIn practice, we don’t compute each attention score at once, but we concentrate all the key to one matrix, same for value and query. Then calculate all the attention score of these at once.\n\\[\\operatorname{Attention}(Q, K, V)=\\underset{\\text { seq }}{\\operatorname{softmax}}\\left(\\frac{Q K^{\\top}}{\\sqrt{d_k}}\\right) V\\]\n\nd_model: the number of features in query, key, and value vectors.\nheads: the number of attention layers.\nd_k: the number of dimension of each vector in each head\n\n\nclass MultiHeadAttention(nn.Module):\n    def __init__(\n        self,\n        heads: int,\n        d_model: int,\n        dropout_prop: float=0.1,\n        bias: bool = True\n    ):\n        super().__init__()\n        self.d_k = d_model // heads\n        self.heads = heads\n        self.query = PrepareForMultiHeadAttention(d_model, heads, self.d_k, bias)\n\n\nsource\n\n\nMultiHeadAttention\n\n MultiHeadAttention (heads:int, d_model:int, dropout_prop:float=0.1,\n                     bias:bool=True)\n\nBase class for all neural network modules.\nYour models should also subclass this class.\nModules can also contain other Modules, allowing to nest them in a tree structure. You can assign the submodules as regular attributes::\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass Model(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(1, 20, 5)\n        self.conv2 = nn.Conv2d(20, 20, 5)\n\n    def forward(self, x):\n        x = F.relu(self.conv1(x))\n        return F.relu(self.conv2(x))\nSubmodules assigned in this way will be registered, and will have their parameters converted too when you call :meth:to, etc.\n.. note:: As per the example above, an __init__() call to the parent class must be made before assignment on the child.\n:ivar training: Boolean represents whether this module is in training or evaluation mode. :vartype training: bool"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "stable-diffusion-from-scratch",
+    "section": "",
+    "text": "This file will become your README and also the index of your documentation."
+  },
+  {
+    "objectID": "index.html#install",
+    "href": "index.html#install",
+    "title": "stable-diffusion-from-scratch",
+    "section": "Install",
+    "text": "Install\npip install stable_diffusion_from_scratch"
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "stable-diffusion-from-scratch",
+    "section": "How to use",
+    "text": "How to use\nFill me in please! Don’t forget code examples:\n\n1+1\n\n2"
+  },
+  {
+    "objectID": "core.html",
+    "href": "core.html",
+    "title": "core",
+    "section": "",
+    "text": "source\n\nfoo\n\n foo ()\n\n\nCodeCode + Explanation\n\n\n\ndef addition(a,b):\n    \"Adds two numbers together\"\n    return a+b\n\n\n\n\ndef addition(a,b):\n    \"Adds two numbers together\"\n    return a+b\n\na+b\nWe take the sum of a and b, which is written in python with the “+” symbol\n\n\n\n\nfrom torch import nn\n\n\nfrom fastcore.foundation import docs\n\n\n@docs\nclass A(nn.Module):\n    def __init__(self):\n        super().__init__()\n      \n    _docs = dict(cls_doc=\"xxx\")\n\n\nsource\n\n\nA\n\n A ()\n\nxxx\n\nclass B(nn.Module):\n    # A simple comment preceding a simple print statement\n    def __init__(self):\n        super().__init__()\n\n\nsource\n\n\nB\n\n B ()\n\nBase class for all neural network modules.\nYour models should also subclass this class.\nModules can also contain other Modules, allowing to nest them in a tree structure. You can assign the submodules as regular attributes::\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass Model(nn.Module):\n    def __init__(self):\n        super().__init__()\n        self.conv1 = nn.Conv2d(1, 20, 5)\n        self.conv2 = nn.Conv2d(20, 20, 5)\n\n    def forward(self, x):\n        x = F.relu(self.conv1(x))\n        return F.relu(self.conv2(x))\nSubmodules assigned in this way will be registered, and will have their parameters converted too when you call :meth:to, etc.\n.. note:: As per the example above, an __init__() call to the parent class must be made before assignment on the child.\n:ivar training: Boolean represents whether this module is in training or evaluation mode. :vartype training: bool"
+  }
+]
