@@ -3,4 +3,8 @@ website:
     contents:
       - index.ipynb
       - 00_core.ipynb
+      - 07_attention.ipynb
       - 07_transformer.attention.ipynb
+      - 09_unet.ipynb
+      - 10_diffusion.ipynb
+      - 20_clip.ipynb

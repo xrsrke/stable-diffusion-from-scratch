@@ -2,7 +2,7 @@ project:
   output-dir: _docs
 
 website:
-  title: "Let's build stable diffusion from scratch"
+  title: "foundation"
   site-url: "https://xrsrke.github.io/stable-diffusion-from-scratch"
   description: "Implementation of Stable Diffusion from scratch"
   repo-branch: main
