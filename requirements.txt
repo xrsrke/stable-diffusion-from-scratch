@@ -1,0 +1,10 @@
+matplotlib
+numpy
+tqdm
+torch
+torchvision
+fastcore
+fastai
+open-clip-torch
+transformers
+diffusers

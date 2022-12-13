@@ -8,6 +8,7 @@ import torch
 from torch import nn
 from .attention import MultiHeadAttention
 from .encoder import PostionWiseFeedForward
+from .embedding import PositionalEncoding
 
 # %% ../../nbs/07_transformer.decoder.ipynb 6
 def create_mask(size):
@@ -51,7 +52,7 @@ class DecoderLayer(nn.ModuleList):
         
         return norm_3, masked_mha_attn_weights, mha_attn_weights
 
-# %% ../../nbs/07_transformer.decoder.ipynb 13
+# %% ../../nbs/07_transformer.decoder.ipynb 14
 class Decoder(nn.Module):
     def __init__(
         self, embedding, d_model, num_heads, num_layers, d_ff,
@@ -59,4 +60,34 @@ class Decoder(nn.Module):
     ):
         super().__init__()
         self.embedding = embedding
-        self.positional_encoding = PostionWiseFeedFor
+        self.positional_encoding = PositionalEncoding(
+            d_model, device=device
+        )
+        self.dropout = nn.Dropout(dropout)
+        self.decoders = nn.ModuleList([
+            DecoderLayer(
+                d_model,
+                num_heads,
+                d_ff,
+                dropout
+            ) for layer in range(num_layers)
+        ])
+    
+    def forward(self, x, encoder_output, trg_mask, src_mask):
+        # shape(x) = [batch_size x trg_seq_len]
+        
+        # shape(embeddings) = [batch_size x trg_seq_len x d_model]
+        embeddings = self.embedding(x)
+        # shape(encoding) = [batch_size x trg_seq_len x d_model]
+        encoding = self.positional_encoding(embedding)
+        
+        for decoder in self.decoders:
+            # shape(encoding) = [batch_size x trg_seq_len x d_model]
+            # shape(masked_mha_attn_weights) = [batch_size x num_heads x trg_seq_len x trg_seq_len]
+            # shape(mha_attn_weights) = [batch_size x num_heads x trg_seq_len x src_seq_len]
+            encoding, masked_mha_attn_weights, mha_attn_weights = decoder(
+                encoding, encoder_output,
+                trg_mask, src_mask
+            )
+        
+        return encoding, masked_mha_attn_weights, mha_attn_weights

@@ -11,7 +11,7 @@ from torch import nn
 
 # %% ../../nbs/07e_transformer.embedding.ipynb 7
 class TextEmbedding(nn.Module):
-    def __init__(self, vocab_size, padding_idx, d_model):
+    def __init__(self, vocab_size: int, padding_idx, d_model: int):
         super().__init__()
         self.d_model = d_model
         self.embed = nn.Embedding(vocab_size, d_model, padding_idx=padding_idx)
@@ -24,7 +24,7 @@ class TextEmbedding(nn.Module):
 
 # %% ../../nbs/07e_transformer.embedding.ipynb 14
 class PositionalEncoding(nn.Module):
-    def __init__(self, d_model, dropout=0.3, max_seq_len=2000):
+    def __init__(self, d_model: int, dropout: float = 0.3, max_seq_len : float = 2000):
         super().__init__()
         self.d_model = d_model
         self.dropout = nn.Dropout(dropout)
@@ -43,7 +43,7 @@ class PositionalEncoding(nn.Module):
         
         self.register_buffer('pe', pe)
     
-    def forward(self, x):
+    def forward(self, x: torch.Tensor):
         # x is text embedding
         # shape(x) = [batch_size x seq_len x d_model]
         seq_len = x.shape[1]

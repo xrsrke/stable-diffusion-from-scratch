@@ -4,6 +4,8 @@
 __all__ = ['ResidualLayerNorm', 'PostionWiseFeedForward', 'EncoderLayer', 'Encoder']
 
 # %% ../../nbs/07_transformer.encoder.ipynb 4
+from typing import Callable
+
 import torch
 from torch import nn
 
@@ -12,17 +14,17 @@ from .embedding import PositionalEncoding
 
 # %% ../../nbs/07_transformer.encoder.ipynb 5
 class ResidualLayerNorm(nn.Module):
-    def __init__(self, d_model, dropout=0.3):
+    def __init__(self, d_model: int, dropout=0.3):
         super().__init__()
         self.layer_norm = nn.LayerNorm(normalized_shape=d_model)
         self.dropout = nn.Dropout(p=dropout)
     
-    def forward(self, x, residual):
+    def forward(self, x: torch.Tensor, residual: torch.Tensor):
         return self.layer_norm(self.dropout(x + residual))
 
 # %% ../../nbs/07_transformer.encoder.ipynb 6
 class PostionWiseFeedForward(nn.Module):
-    def __init__(self, d_model, d_ff, dropout=0.3):
+    def __init__(self, d_model: int, d_ff: int, dropout=0.3):
         super().__init__()
 
         self.feed_forward = nn.Sequential(
@@ -32,7 +34,7 @@ class PostionWiseFeedForward(nn.Module):
             nn.Linear(d_ff, d_model)
         )
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor):
         # shape(x) = [B x seq_len x D]
 
         output = self.feed_forward(x)
@@ -42,7 +44,7 @@ class PostionWiseFeedForward(nn.Module):
 
 # %% ../../nbs/07_transformer.encoder.ipynb 7
 class EncoderLayer(nn.Module):
-    def __init__(self, d_model, num_heads, d_ff, dropout=0.3):
+    def __init__(self, d_model: int, num_heads: int, d_ff: int, dropout: float = 0.3):
         super().__init__()
         self.norm_1 = ResidualLayerNorm(d_model, dropout)
         self.mha = MultiHeadAttention(d_model, num_heads, dropout)
@@ -50,7 +52,7 @@ class EncoderLayer(nn.Module):
         # self.positional_wise = None
         self.feed_forward = PostionWiseFeedForward(d_model, d_ff, dropout)
     
-    def forward(self, x, mask):
+    def forward(self, x: torch.Tensor, mask):
         
         # shape(mha) = [batch_size x seq_len x d_model]
         # shape(encoder_attention_weights) = [batch_size x num_heads x seq_len x seq_len]
@@ -70,8 +72,8 @@ class EncoderLayer(nn.Module):
 # %% ../../nbs/07_transformer.encoder.ipynb 9
 class Encoder(nn.Module):
     def __init__(
-        self, embedding, d_model, num_heads, num_layers,
-        d_ff, dropout=0.3
+        self, embedding: Callable, d_model: int, num_heads: int, num_layers: int,
+        d_ff: int, dropout: float = 0.3
     ):
         super().__init__()
         self.embedding = embedding

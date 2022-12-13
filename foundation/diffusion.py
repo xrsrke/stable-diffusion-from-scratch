@@ -14,7 +14,7 @@ from matplotlib import pyplot as plt
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f'Using device: {device}')
 
-# %% ../nbs/10_diffusion.ipynb 17
+# %% ../nbs/10_diffusion.ipynb 16
 def corrupt(img, amount):
     noise = torch.randn_like(img)
     return (1-amount)*img + noise * amount
