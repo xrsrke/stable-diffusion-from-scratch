@@ -10,7 +10,7 @@ import torch
 from torch import nn
 
 from .attention import MultiHeadAttention
-from .embedding import PositionalEncoding
+from .positional_encoding import PositionalEncoding
 
 # %% ../../nbs/transformer/07_transformer.encoder.ipynb 5
 class ResidualLayerNorm(nn.Module):
