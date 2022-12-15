@@ -10,7 +10,7 @@ from typing import Union
 import torch
 from torch import nn
 
-# %% ../../nbs/transformer/07e_transformer.embedding.ipynb 7
+# %% ../../nbs/transformer/07e_transformer.embedding.ipynb 6
 class TextEmbedding(nn.Module):
     def __init__(self, vocab_size: int, d_model: int, padding_idx: Union[int, float]):
         super().__init__()

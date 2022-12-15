@@ -14,7 +14,7 @@ class PositionalEncoding(nn.Module):
         self.d_model = d_model
         self.dropout = nn.Dropout(dropout)
         
-        self.pe = torch.zeros(max_seq_len, d_model)
+        pe = torch.zeros(max_seq_len, d_model)
         pos = torch.arange(0, max_seq_len).unsqueeze(1).float()
         
         two_i = torch.arange(0, d_model, step=2).float()

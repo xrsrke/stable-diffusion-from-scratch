@@ -53,15 +53,17 @@ class MultiHeadAttention(nn.Module):
         self.linear_projection = nn.Linear(d_model, d_model)
     
     def split_head(self, x: torch.Tensor):
+        """Split one head to n_heads."""
         batch_size, n_words, d_model = x.size()
         d_head = d_model // self.n_head
         
-        tenxsor = x.view(batch_size, n_words, self.n_head, d_head)
+        x = x.view(batch_size, n_words, self.n_head, d_head)
         x = x.transpose(2, 1) # transpose self.n_head and n_words
         
         return x
 
     def concat(self, x: torch.Tensor):
+        """Concat multiples head in input to one head."""
         batch_size, n_heads, n_words, d_head = x.size()
         return x.view(batch_size, -1, self.d_model)
     
@@ -74,8 +76,8 @@ class MultiHeadAttention(nn.Module):
         q_batch, k_batch, v_batch = self.split_head(q_batch), self.split_head(k_batch), self.split_head(v_batch)
         
         output_batch, attention_weights_batch = self.attention(q_batch, k_batch, v_batch, mask)
-        output_batch = self.concat(output_batch)
         
+        output_batch = self.concat(output_batch)
         projection_batch = self.dropout(self.linear_projection(output_batch))
         
         return projection_batch, attention_weights_batch
