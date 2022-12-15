@@ -8,3 +8,4 @@ fastai
 open-clip-torch
 transformers
 diffusers
+pytest
