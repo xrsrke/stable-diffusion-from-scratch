@@ -39,9 +39,9 @@ class MultiHeadAttention(nn.Module):
         super().__init__()
         self.n_head = n_head
         self.d_model = d_model
+        self.d_head = d_model // n_head
         
-        # assert d_model // n_head
-        self.attention = ScaleDotProductAttention(d_model = d_model)
+        self.attention = ScaleDotProductAttention(d_head = self.d_head)
         
         self.dropout = nn.Dropout(dropout)
         
@@ -62,7 +62,8 @@ class MultiHeadAttention(nn.Module):
         return x
 
     def concat(self, x: torch.Tensor):
-        pass
+        batch_size, n_heads, n_words, d_head = x.size()
+        return x.view(batch_size, -1, self.d_model)
     
     def forward(self, pre_q: torch.Tensor, pre_k: torch.Tensor, pre_v: torch.Tensor, mask=None):
         
@@ -73,6 +74,7 @@ class MultiHeadAttention(nn.Module):
         q_batch, k_batch, v_batch = self.split_head(q_batch), self.split_head(k_batch), self.split_head(v_batch)
         
         output_batch, attention_weights_batch = self.attention(q_batch, k_batch, v_batch, mask)
+        output_batch = self.concat(output_batch)
         
         projection_batch = self.dropout(self.linear_projection(output_batch))
         

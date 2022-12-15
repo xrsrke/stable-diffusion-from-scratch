@@ -12,7 +12,7 @@ def attention_parameters():
     return {
         'batch_size': batch_size,
         'n_words': n_words,
-       'd_model': d_model,
+        'd_model': d_model,
         'n_heads': n_heads,
         'd_head': d_head
     }
