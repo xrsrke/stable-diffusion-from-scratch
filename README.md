@@ -11,7 +11,7 @@ This repository contains Stable Diffusion's implementation in PyTorch.
 YES. Im currently active working on this project everyday. Estimate will be done in janurary. I will put all the components together and load the pre-trained weights.
 
 
-## Install
+### Install
 
 ```bash
 pip install -r requirements.txt
@@ -20,9 +20,9 @@ pip install -e .
 
 ### Usage
 
-## Paper Reviews
+### Paper Reviews
 
-## Contributing
+### Contributing
 
 This repository is still a work in progress.<br>
 Currently, no downloads and no executables are provided.
