@@ -1,9 +1,10 @@
 <h1 align="center">Implementation of Stable Diffusion</h1>
+
 High-Resolution Image Synthesis with Latent Diffusion Models
 
 [[arXiv Paper]](https://arxiv.org/pdf/2205.06175.pdf)
 
-================
+---
 
 This repository contains Stable Diffusion's implementation in PyTorch.
 
