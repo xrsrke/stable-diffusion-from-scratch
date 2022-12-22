@@ -9,7 +9,7 @@ High-Resolution Image Synthesis with Latent Diffusion Models
 This repository contains Stable Diffusion's implementation in PyTorch.
 
 ### Updates
-YES. Im currently active working on this project everyday. Estimate will be done in janurary. I will put all the components together and load the pre-trained weights.
+Yes, I am actively working on this project every day. I expect to complete it by January. My plan is to put all the components together and load the pre-trained weights.
 
 
 ### Install
