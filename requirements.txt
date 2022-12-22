@@ -9,3 +9,5 @@ open-clip-torch
 transformers
 diffusers
 pytest
+torchtext
+torchdata

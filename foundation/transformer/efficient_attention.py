@@ -5,6 +5,7 @@ __all__ = ['ScaleDotProductAttention', 'MultiHeadAttention']
 
 # %% ../../nbs/transformer/07a_transformer.efficient_attention.ipynb 4
 import math
+from typing import Optional
 
 import torch
 from torch import nn
@@ -16,7 +17,7 @@ class ScaleDotProductAttention(nn.Module):
         super().__init__()
         self.d_head = d_head
     
-    def forward(self, q_batch: torch.Tensor, k_batch: torch.Tensor, v_batch: torch.Tensor, mask=None):
+    def forward(self, q_batch: torch.Tensor, k_batch: torch.Tensor, v_batch: torch.Tensor, mask: Optional[torch.Tensor] = None):
         # shape(q_batch) = [batch_size x num_heads x Q_len x d_head]
         # shape(k_batch, v_batch) = [batch_size x num_heads x KV_len x d_head]
         
@@ -67,7 +68,7 @@ class MultiHeadAttention(nn.Module):
         batch_size, n_heads, n_words, d_head = x.size()
         return x.view(batch_size, -1, self.d_model)
     
-    def forward(self, pre_q: torch.Tensor, pre_k: torch.Tensor, pre_v: torch.Tensor, mask=None):
+    def forward(self, pre_q: torch.Tensor, pre_k: torch.Tensor, pre_v: torch.Tensor, mask: Optional[torch.Tensor] = None):
         
         # 1. dot product with weight matrices
         q_batch, k_batch, v_batch = self.w_q(pre_q), self.w_k(pre_k), self.w_v(pre_v)

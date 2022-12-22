@@ -6,9 +6,11 @@ __all__ = ['create_mask', 'DecoderLayer', 'Decoder']
 # %% ../../nbs/transformer/07e_transformer.decoder.ipynb 4
 import torch
 from torch import nn
-from .attention import MultiHeadAttention
+from .efficient_attention import MultiHeadAttention
 from .encoder import PostionWiseFeedForward
-from .embedding import PositionalEncoding
+from .embedding import TextEmbedding
+from .positional_encoding import PositionalEncoding
+from .encoder import ResidualLayerNorm
 
 # %% ../../nbs/transformer/07e_transformer.decoder.ipynb 6
 def create_mask(size):
@@ -16,70 +18,82 @@ def create_mask(size):
 
 # %% ../../nbs/transformer/07e_transformer.decoder.ipynb 11
 class DecoderLayer(nn.ModuleList):
-    def __init__(self, d_model, num_heads, d_ff, dropout=0.3):
+    def __init__(self, d_model: int, n_heads: int, d_ff: int, dropout:float=0.3):
         super().__init__()
         self.norm_1 = ResidualLayerNorm(d_model)
         self.norm_2 = ResidualLayerNorm(d_model)
         self.norm_3 = ResidualLayerNorm(d_model)
         
-        self.masked_mha = MultiHeadAttention(d_model, num_heads)
-        self.mha = MultiHeadAttention(d_model, num_heads)
+        self.masked_mha = MultiHeadAttention(d_model, n_heads)
+        self.encoder_decoder_mha = MultiHeadAttention(d_model, n_heads)
         self.feed_forward = PostionWiseFeedForward(d_model, d_ff)
     
-    def forward(self, x, encoder_outputs, trg_mask, src_mask):
+    def forward(
+        self,
+        x: torch.Tensor, encoder_output: torch.Tensor,
+        trg_mask: torch.Tensor, src_mask: torch.Tensor
+    ):
+        """_summary_
+
+        Args:
+            x (torch.Tensor): the input for the decoder
+            encoder_output (_type_): the ouput of the encoder stack
+            trg_mask (_type_): the mask for target sequence
+            src_mask (_type_): the mask for source sequence
+        """
         # shape(x) = [batch_size x trg_seq_len x d_model]
         # shape(encoder_output) = [batch_size x src_seq_len x d_model]
         
         
         # shape(masked_mha) = [batch_size x trg_se_len x d_model]
-        # shape(masked_mha_attn_weights)
-        # = [batch_size x num_heads x trg_seq_len x trg_seq_len]
+        # shape(masked_mha_attn_weights) 
+        # = [batch_size x n_heads x trg_seq_len x trg_seq_len]
         masked_mha, masked_mha_attn_weights = self.masked_mha(x, x, x, mask=trg_mask)
         
         norm_1 = self.norm_1(masked_mha, x)
         
         # shape(mha) = [batch_size x trg_seq_len x d_model]
-        # shape(mha_attn_weights) = [batch_size x num_heads x trg_seq_len x trg_seq_len]
-        mha, mha_attn_weights = self.mha(
-            norm1, encoder_outputs, encoder_outputs,
+        # shape(mha_attn_weights) = [batch_size x n_heads x trg_seq_len x trg_seq_len]
+        encoder_decoder_mha, encoder_decoder_mha_attn_weights = self.encoder_decoder_mha(
+            pre_q=norm_1, pre_k=encoder_output, pre_v=encoder_output,
             mask=src_mask
         )
         
-        norm_2 = self.norm_2(mha, norm_1)
+        norm_2 = self.norm_2(encoder_decoder_mha, norm_1)
         
         feed_forward = self.feed_forward(norm_2)
+        
         norm_3 = self.norm_3(feed_forward, norm_2)
         
-        return norm_3, masked_mha_attn_weights, mha_attn_weights
+        return norm_3, masked_mha_attn_weights, encoder_decoder_mha_attn_weights
 
 # %% ../../nbs/transformer/07e_transformer.decoder.ipynb 14
 class Decoder(nn.Module):
     def __init__(
-        self, embedding, d_model, num_heads, num_layers, d_ff,
-        device="cpu", dropout=0.3
+        self, d_model: int,
+        n_heads: int, n_layers: int, d_ff: int,
+        dropout: float=0.3
     ):
         super().__init__()
-        self.embedding = embedding
-        self.positional_encoding = PositionalEncoding(
-            d_model, device=device
-        )
+        self.embedding = TextEmbedding(vocab_size=1000, d_model=d_model, padding_idx=0)
+        self.positional_encoding = PositionalEncoding(d_model)
         self.dropout = nn.Dropout(dropout)
         self.decoders = nn.ModuleList([
             DecoderLayer(
                 d_model,
-                num_heads,
+                n_heads,
                 d_ff,
                 dropout
-            ) for layer in range(num_layers)
+            ) for layer in range(n_layers)
         ])
     
-    def forward(self, x, encoder_output, trg_mask, src_mask):
-        # shape(x) = [batch_size x trg_seq_len]
+    def forward(self, x: torch.Tensor, encoder_output: torch.Tensor, trg_mask: torch.Tensor, src_mask: torch.Tensor):
+        # shape(x) = [batch_size x trg_seq_len], raw tokenizer input
         
         # shape(embeddings) = [batch_size x trg_seq_len x d_model]
         embeddings = self.embedding(x)
         # shape(encoding) = [batch_size x trg_seq_len x d_model]
-        encoding = self.positional_encoding(embedding)
+        encoding = self.positional_encoding(embeddings)
         
         for decoder in self.decoders:
             # shape(encoding) = [batch_size x trg_seq_len x d_model]

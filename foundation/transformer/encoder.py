@@ -9,7 +9,8 @@ from typing import Callable, Optional
 import torch
 from torch import nn
 
-from .attention import MultiHeadAttention
+# from foundation.transformer.attention import MultiHeadAttention
+from .efficient_attention import MultiHeadAttention
 from .embedding import TextEmbedding
 from .positional_encoding import PositionalEncoding
 
