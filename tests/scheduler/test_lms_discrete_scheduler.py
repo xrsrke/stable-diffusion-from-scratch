@@ -31,3 +31,4 @@ def test_scale_model_input_for_scheduler(scheduler):
     assert output.shape == (3, 4)
 
 def test_step_for_scheduler(scheduler):
+    pass

@@ -1,7 +1,7 @@
 import pytest
 
 from foundation.clip.tokenizier import CLIPTokenizier
-from foundation.clip.text_encoder import TextEncoder
+from foundation.clip.text_encoder import CLIPTextEncoder
 
 PROMPT = "persistence is all you need"
 
@@ -21,4 +21,4 @@ def prompt_ids(tokenized_prompt):
 
 @pytest.fixture
 def prompt_embedding(prompt_ids):
-    return TextEncoder.encode_from_ids(prompt_ids)
+    return CLIPTextEncoder.encode_from_ids(prompt_ids)
