@@ -11,3 +11,4 @@ diffusers
 pytest
 torchtext
 torchdata
+accelerate

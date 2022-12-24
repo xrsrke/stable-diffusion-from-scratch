@@ -1,9 +1,7 @@
-from foundation.clip.tokenizier import ClipTokenizer, TOKEN_LENGTH
+from foundation.clip.tokenizier import CLIPTokenizier
 
-def test_clip_tokenizer():
-    tokenizier = ClipTokenizer()
-    prompt = "persistence is all you need"
+def test_clip_tokenizer(input_ids):
+    assert input_ids.shape == (1, 77)
 
-    tokens = tokenizier.encode(prompt)
-
-    assert len(tokens) == TOKEN_LENGTH
+def test_text_encoder(prompt_embedding):
+    assert prompt_embedding.shape == (1, 77, 768)
