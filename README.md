@@ -22,6 +22,8 @@ pip install -e .
 ## Usage
 
 ## Paper Reviews
+
+### CLIP - Multimodal Neurons
 ### VAE
 
 Variational Autoencoder (VAE) model with KL loss from the paper Auto-Encoding Variational Bayes by Diederik P. Kingma and Max Wellin
