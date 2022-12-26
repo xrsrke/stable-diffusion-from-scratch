@@ -1,13 +1,13 @@
 import pytest
 
-from foundation.clip.tokenizier import CLIPTokenizier
+from foundation.clip.tokenizier import CLIPTokenizer
 from foundation.clip.text_encoder import CLIPTextEncoder
 
 PROMPT = "persistence is all you need"
 
 @pytest.fixture
 def tokenized_prompt():
-    tokenizier = CLIPTokenizier()
+    tokenizier = CLIPTokenizer()
     output = tokenizier.encode(PROMPT)
     return output
 
