@@ -2,20 +2,30 @@ website:
   sidebar:
     contents:
       - index.ipynb
-      - 00_core.ipynb
-      - 07_attention.ipynb
-      - 07_transformer.attention.ipynb
-      - 07_transformer.decoder.ipynb
-      - 07_transformer.efficient_attention.ipynb
-      - 07_transformer.encoder.ipynb
-      - 07_transformer.positional_encoding.ipynb
-      - 07a_attention.ipynb
-      - 07a_transformer.ipynb
-      - 07b_attention.ipynb
-      - 07b_flashcards.ipynb
-      - 07bb_flashcards.ipynb
-      - 07e_transformer.embedding.ipynb
-      - 09_unet.ipynb
       - 10_diffusion.ipynb
-      - 20_clip.ipynb
-      - 99_transformer.ipynb
+      - 99_utils.ipynb
+      - stable_diffusion.ipynb
+      - section: autoencoder
+        contents:
+          - autoencoder/01_autoencoder_kl.ipynb
+      - section: clip
+        contents:
+          - clip/01_clip.ipynb
+          - clip/02_clip_tokenizier.ipynb
+          - clip/03_text_encoder.ipynb
+      - section: scheduler
+        contents:
+          - scheduler/01_lms_scheduler.ipynb
+      - section: transformer
+        contents:
+          - transformer/07_transformer.ipynb
+          - transformer/07_transformer.train.ipynb
+          - transformer/07a_transformer.attention.ipynb
+          - transformer/07a_transformer.efficient_attention.ipynb
+          - transformer/07b_transformer.positional_encoding.ipynb
+          - transformer/07c_transformer.embedding.ipynb
+          - transformer/07d_transformer.encoder.ipynb
+          - transformer/07e_transformer.decoder.ipynb
+      - section: unet
+        contents:
+          - unet/01_unet_condition_model.ipynb

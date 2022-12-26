@@ -21,4 +21,5 @@ def prompt_ids(tokenized_prompt):
 
 @pytest.fixture
 def prompt_embedding(prompt_ids):
-    return CLIPTextEncoder.encode_from_ids(prompt_ids)
+    text_encoder = CLIPTextEncoder()
+    return text_encoder.encode_from_ids(prompt_ids)
